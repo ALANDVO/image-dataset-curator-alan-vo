@@ -1,0 +1,60 @@
+{
+  "realm": "curator",
+  "enabled": true,
+  "displayName": "Image Dataset Curator Realm",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Administrator role with full dataset and curation access"
+      },
+      {
+        "name": "analyst",
+        "description": "Analyst role with image upload, curation, and manifest export access"
+      },
+      {
+        "name": "viewer",
+        "description": "Viewer role with read-only access to datasets and images"
+      }
+    ]
+  },
+  "defaultRoles": ["viewer"],
+  "clients": [
+    {
+      "clientId": "curator-app",
+      "name": "Image Dataset Curator Application",
+      "enabled": true,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "curator-dev-client-secret",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:5173/auth/callback",
+        "http://localhost:8000/api/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "email"
+      ]
+    }
+  ]
+}
