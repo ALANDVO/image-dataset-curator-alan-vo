@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "image-dataset-curator-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "computer-vision",
+  "summary": "Inspects uploaded images for perceptual duplicates, EXIF privacy issues, and dimension quality; curates stratified train/val/test splits using deterministic hashing; and exports ML-ready JSONL/CSV/COCO manifests.",
+  "workflows": [
+    "Upload and analyse images for dimensions, EXIF metadata privacy risks, perceptual hash fingerprints, and image quality scores",
+    "Detect near-duplicate images across datasets using pHash Hamming-distance comparison and mark duplicates for curation",
+    "Assign deterministic or seeded-random train/val/test splits and export ML-ready manifests in JSONL, CSV, or COCO-lite format"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "version": "1.0.0"
+}
