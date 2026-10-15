@@ -92,15 +92,6 @@ export interface Advisory {
 let _csrfToken: string | null = null
 let _me: UserInfo | null = null
 
-export async function fetchMe(): Promise<UserInfo> {
-  const res = await fetch(`${BASE}/api/me`, { credentials: 'include' })
-  if (res.status === 401) throw new Error('unauthenticated')
-  if (!res.ok) throw new Error(`/me failed: ${res.status}`)
-  _me = await res.json() as UserInfo
-  _csrfToken = _me.csrf_token
-  return _me
-}
-
 function csrfHeaders(): Record<string, string> {
   return _csrfToken ? { 'X-CSRF-Token': _csrfToken } : {}
 }
@@ -119,17 +110,26 @@ async function handleResponse<T>(res: Response): Promise<T> {
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
 export function getLoginUrl(): string {
-  return `${BASE}/api/login`
+  return `${BASE}/api/auth/login`
 }
 
 export async function logout(): Promise<void> {
-  await fetch(`${BASE}/api/logout`, {
+  await fetch(`${BASE}/api/auth/logout`, {
     method: 'POST',
     credentials: 'include',
     headers: csrfHeaders(),
   })
   _csrfToken = null
   _me = null
+}
+
+export async function fetchMe(): Promise<UserInfo> {
+  const res = await fetch(`${BASE}/api/auth/me`, { credentials: 'include' })
+  if (res.status === 401) throw new Error('unauthenticated')
+  if (!res.ok) throw new Error(`/me failed: ${res.status}`)
+  _me = await res.json() as UserInfo
+  _csrfToken = _me.csrf_token
+  return _me
 }
 
 // ─── Images ──────────────────────────────────────────────────────────────────

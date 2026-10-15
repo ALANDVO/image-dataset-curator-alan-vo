@@ -1,6 +1,9 @@
 # Image Dataset Curator | Alan Vo | AI & Machine Learning
 
-Current version: `1.0.0`.
+> Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
+
+
+Current version: `1.0.1`.
 
 An end-to-end computer-vision dataset quality tool for Alan Vo. It solves the practical problem of curating raw image collections before ML training: automatically detecting EXIF privacy leaks, near-duplicate images, and quality outliers, then assigning reproducible train/val/test splits and exporting ML-ready manifests. Intended for ML practitioners who need clean, well-documented image datasets without manual triage.
 
