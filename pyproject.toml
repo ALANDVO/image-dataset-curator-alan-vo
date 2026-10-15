@@ -4,7 +4,7 @@ build-backend = "setuptools.backends.legacy:build"
 
 [project]
 name = "image-dataset-curator"
-version = "1.0.0"
+version = "1.0.1"
 description = "Inspect uploaded images for dimensions, EXIF privacy and perceptual duplicates; curate splits and export manifests."
 readme = "README.md"
 license = { file = "LICENSE" }

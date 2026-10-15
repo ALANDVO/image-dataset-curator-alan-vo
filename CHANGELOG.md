@@ -1,6 +1,16 @@
 # Changelog
 
+## 1.1.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 All notable changes to this project will be documented in this file.
+
+## [1.0.1] - 2026-10-15
+
+### Fixed
+- **Auth endpoint URLs in frontend API client**: Corrected `getLoginUrl()`, `logout()`, and `fetchMe()` to use `/api/auth/` prefix matching backend routes (was `/api/login`, `/api/logout`, `/api/me`).
+
 
 ## [1.0.0] - 2026-10-09
 

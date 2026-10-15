@@ -47,7 +47,7 @@ vi.mock('../api/client', () => ({
   detectDuplicates: vi.fn().mockResolvedValue({ pairs_found: 1, marked_duplicate: 1, pairs: [] }),
   getDatasetAdvisory: vi.fn().mockResolvedValue({ advisory: 'This dataset looks good.', is_advisory: true }),
   exportManifestUrl: vi.fn((id: string, fmt: string) => `/api/datasets/${id}/export?fmt=${fmt}`),
-  getLoginUrl: vi.fn(() => '/api/login'),
+  getLoginUrl: vi.fn(() => '/api/auth/login'),
   logout: vi.fn().mockResolvedValue(undefined),
   uploadImage: vi.fn(),
   imageFileUrl: vi.fn((id: string) => `/api/images/${id}/file`),

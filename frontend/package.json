@@ -1,6 +1,6 @@
 {
   "name": "image-dataset-curator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "author": "Alan Vo <alanvo@gmail.com>",
   "description": "Frontend for Image Dataset Curator \u2014 computer-vision dataset quality tool",
