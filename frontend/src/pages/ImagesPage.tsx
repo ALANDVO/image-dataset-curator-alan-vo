@@ -170,6 +170,68 @@ function UploadZone({ datasetId, onUploaded }: { datasetId?: string; onUploaded:
   )
 }
 
+// ─── Duplicate Pairs Modal ──────────────────────────────────────────────────────
+function DuplicatePairsModal({ pairs, images, onClose }: {
+  pairs: [string, string][]
+  images: ImageRecord[]
+  onClose: () => void
+}) {
+  const imageMap = new Map(images.map(img => [img.id, img]))
+
+  return (
+    <div className="modal-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal" style={{ maxWidth: '700px', maxHeight: '80vh', overflow: 'auto' }}>
+        <div className="modal-header">
+          <h3>🔍 Duplicate Pairs Found</h3>
+          <button className="btn btn-ghost btn-sm" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-body" style={{ padding: '1rem' }}>
+          <p style={{ color: 'var(--color-text-dim)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+            {pairs.length} pair{pairs.length === 1 ? '' : 's'} detected. The second image in each pair is marked as a duplicate of the first.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {pairs.map(([canonicalId, duplicateId], idx) => {
+              const canonical = imageMap.get(canonicalId)
+              const duplicate = imageMap.get(duplicateId)
+              return (
+                <div key={idx} className="card" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                    <div className="thumb" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
+                      {canonical && (
+                        <img src={`/api/images/${canonical.id}/file`} alt={canonical.original_filename} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{canonical?.original_filename || canonicalId}</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>Canonical · {canonical?.width}×{canonical?.height} · {canonical?.format}</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '1.2rem', color: 'var(--color-accent)', margin: '0 0.5rem' }}>→</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                    <div className="thumb" style={{ width: '60px', height: '60px', flexShrink: 0 }}>
+                      {duplicate && (
+                        <img src={`/api/images/${duplicate.id}/file`} alt={duplicate.original_filename} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{duplicate?.original_filename || duplicateId}</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>Duplicate · {duplicate?.width}×{duplicate?.height} · {duplicate?.format}</div>
+                      <span className="badge badge-dup" style={{ fontSize: '0.6rem', marginTop: '0.2rem', display: 'inline-block' }}>Duplicate</span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div className="modal-footer" style={{ padding: '1rem', borderTop: '1px solid var(--color-border)' }}>
+          <button className="btn btn-primary" onClick={onClose}>Got it</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Main Images Page ─────────────────────────────────────────────────────────
 export default function ImagesPage() {
   const { user } = useAuth()
@@ -182,6 +244,8 @@ export default function ImagesPage() {
   const [selected, setSelected] = useState<ImageRecord | null>(null)
   const [datasets, setDatasets] = useState<DatasetRecord[]>([])
   const [dupResult, setDupResult] = useState<string | null>(null)
+  const [dupPairs, setDupPairs] = useState<[string, string][] | null>(null)
+  const [showDupModal, setShowDupModal] = useState(false)
   const [running, setRunning] = useState(false)
   const PAGE_SIZE = 24
 
@@ -216,10 +280,14 @@ export default function ImagesPage() {
   }
 
   const handleDetectDuplicates = async () => {
-    setRunning(true); setDupResult(null)
+    setRunning(true); setDupResult(null); setDupPairs(null)
     try {
       const res = await detectDuplicates(filterDs)
       setDupResult(`Found ${res.pairs_found} pairs; marked ${res.marked_duplicate} as duplicates.`)
+      if (res.pairs && res.pairs.length > 0) {
+        setDupPairs(res.pairs)
+        setShowDupModal(true)
+      }
       void load(page)
     } catch (e) { setError((e as Error).message) }
     finally { setRunning(false) }
@@ -329,6 +397,13 @@ export default function ImagesPage() {
             setImages(prev => prev.map(i => i.id === updated.id ? updated : i))
             setSelected(updated)
           }}
+        />
+      )}
+      {showDupModal && dupPairs && (
+        <DuplicatePairsModal
+          pairs={dupPairs}
+          images={images}
+          onClose={() => setShowDupModal(false)}
         />
       )}
     </div>
