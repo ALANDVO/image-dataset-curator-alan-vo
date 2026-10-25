@@ -1,8 +1,14 @@
 # Changelog
 
+## 1.2.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+### Added
+- **Duplicate pairs review modal** (Images page): After running duplicate detection, a modal displays side-by-side thumbnails of each canonical/duplicate pair with filename, dimensions, and format. Duplicate images are marked with a badge. Users can review pairs before deciding on further action.
 
 All notable changes to this project will be documented in this file.
 
