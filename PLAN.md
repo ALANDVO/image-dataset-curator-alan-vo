@@ -20,6 +20,16 @@ Acceptance:
 
 Implementation: `frontend/src/pages/ImagesPage.tsx`
 
+### duplicate-pairs-full-images — Fetch full image details for all duplicate pairs in modal
+
+Status: done
+
+Acceptance:
+- Duplicate pairs modal shows thumbnails and metadata for ALL detected pairs, not just those on the current page
+- Modal fetches complete image records for all pair images via API before displaying
+
+Implementation: `frontend/src/pages/ImagesPage.tsx`
+
 ### continue-implementation — Continue implementation and resolve known failures
 
 Status: planned

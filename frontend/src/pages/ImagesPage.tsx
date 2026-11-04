@@ -245,6 +245,7 @@ export default function ImagesPage() {
   const [datasets, setDatasets] = useState<DatasetRecord[]>([])
   const [dupResult, setDupResult] = useState<string | null>(null)
   const [dupPairs, setDupPairs] = useState<[string, string][] | null>(null)
+  const [dupPairImages, setDupPairImages] = useState<ImageRecord[]>([])
   const [showDupModal, setShowDupModal] = useState(false)
   const [running, setRunning] = useState(false)
   const PAGE_SIZE = 24
@@ -280,12 +281,25 @@ export default function ImagesPage() {
   }
 
   const handleDetectDuplicates = async () => {
-    setRunning(true); setDupResult(null); setDupPairs(null)
+    setRunning(true); setDupResult(null); setDupPairs(null); setDupPairImages(null)
     try {
       const res = await detectDuplicates(filterDs)
       setDupResult(`Found ${res.pairs_found} pairs; marked ${res.marked_duplicate} as duplicates.`)
       if (res.pairs && res.pairs.length > 0) {
         setDupPairs(res.pairs)
+        // Fetch full image details for all pairs
+        const allImageIds = new Set<string>()
+        res.pairs.forEach(([a, b]) => { allImageIds.add(a); allImageIds.add(b) })
+        const pairImages: ImageRecord[] = []
+        for (const id of allImageIds) {
+          try {
+            const img = await getImage(id)
+            pairImages.push(img)
+          } catch {
+            // Ignore failed fetches
+          }
+        }
+        setDupPairImages(pairImages)
         setShowDupModal(true)
       }
       void load(page)
@@ -402,7 +416,7 @@ export default function ImagesPage() {
       {showDupModal && dupPairs && (
         <DuplicatePairsModal
           pairs={dupPairs}
-          images={images}
+          images={dupPairImages}
           onClose={() => setShowDupModal(false)}
         />
       )}
