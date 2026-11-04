@@ -18,6 +18,19 @@
       "tests": []
     },
     {
+      "id": "duplicate-pairs-full-images",
+      "title": "Fetch full image details for all duplicate pairs in modal",
+      "status": "done",
+      "acceptance": [
+        "Duplicate pairs modal shows thumbnails and metadata for ALL detected pairs, not just those on the current page",
+        "Modal fetches complete image records for all pair images via API before displaying"
+      ],
+      "implementation": [
+        "frontend/src/pages/ImagesPage.tsx"
+      ],
+      "tests": []
+    },
+    {
       "id": "continue-implementation",
       "title": "Continue implementation and resolve known failures",
       "status": "planned",

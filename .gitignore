@@ -33,3 +33,15 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+.turbo/
+.env.local
+.env.*.local
+**/data/media/
+venv/
+*.pyc
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
