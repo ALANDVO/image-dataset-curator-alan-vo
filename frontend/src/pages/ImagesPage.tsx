@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import {
   listImages, uploadImage, patchImage, deleteImage, stripExif,
-  detectDuplicates, listDatasets, getImageAdvisory, imageFileUrl,
+  detectDuplicates, listDatasets, getImageAdvisory, getImage, imageFileUrl,
   ImageRecord, DatasetRecord,
 } from '../api/client'
 import { useAuth } from '../context/AuthContext'
@@ -281,7 +281,7 @@ export default function ImagesPage() {
   }
 
   const handleDetectDuplicates = async () => {
-    setRunning(true); setDupResult(null); setDupPairs(null); setDupPairImages(null)
+    setRunning(true); setDupResult(null); setDupPairs(null); setDupPairImages([])
     try {
       const res = await detectDuplicates(filterDs)
       setDupResult(`Found ${res.pairs_found} pairs; marked ${res.marked_duplicate} as duplicates.`)
