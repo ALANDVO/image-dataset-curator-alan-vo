@@ -42,3 +42,7 @@ All notable changes to this project will be documented in this file.
 - **React/TypeScript frontend**: Dashboard, image gallery with filtering, dataset management, split assignment, manifest export, and EXIF-strip workflow. Typed API client derived from backend routes.
 - **Docker Compose**: Multi-service stack (backend, frontend, Keycloak) with persistent volumes and healthchecks.
 - **CI**: GitHub Actions workflow testing backend (pytest), frontend (npm build + vitest), and Docker builds.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

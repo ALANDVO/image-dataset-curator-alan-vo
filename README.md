@@ -189,3 +189,7 @@ docker compose exec backend tar xzf /tmp/backup.tar.gz -C /
 ---
 
 Alan Vo | alanvo@gmail.com
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

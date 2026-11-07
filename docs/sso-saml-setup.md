@@ -60,3 +60,7 @@ To connect an enterprise SAML 2.0 provider:
 5. After successful SAML assertion validation, Keycloak issues authorization code to the backend callback.
 6. The backend exchanges the code and PKCE verifier for tokens with Keycloak, validates claims/nonce, and sets an HttpOnly `session_token` cookie.
 7. Mutating requests are guarded by session cookies, CSRF tokens, and role-based checks.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
