@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "duplicate-pairs-review",
+  "current_feature": "duplicate-pairs-distance",
   "features": [
     {
       "id": "duplicate-pairs-review",
@@ -29,6 +29,26 @@
         "frontend/src/pages/ImagesPage.tsx"
       ],
       "tests": []
+    },
+    {
+      "id": "duplicate-pairs-distance",
+      "title": "Show pHash distance in duplicate pairs modal",
+      "status": "done",
+      "acceptance": [
+        "Duplicate detection API returns pHash Hamming distance for each pair",
+        "Duplicate pairs modal displays the pHash distance below each duplicate image",
+        "Distance value helps users understand similarity level (0 = identical, higher = more different)"
+      ],
+      "implementation": [
+        "backend/app/services/image_analysis.py",
+        "backend/app/api/images.py",
+        "frontend/src/api/client.ts",
+        "frontend/src/pages/ImagesPage.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_api.py::TestDatasetWorkflow::test_detect_duplicates",
+        "frontend/src/test/App.test.tsx"
+      ]
     },
     {
       "id": "continue-implementation",
