@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-duplicate-pairs-review
+duplicate-pairs-distance
 
 ## Roadmap
 
@@ -29,6 +29,19 @@ Acceptance:
 - Modal fetches complete image records for all pair images via API before displaying
 
 Implementation: `frontend/src/pages/ImagesPage.tsx`
+
+### duplicate-pairs-distance — Show pHash distance in duplicate pairs modal
+
+Status: done
+
+Acceptance:
+- Duplicate detection API returns pHash Hamming distance for each pair
+- Duplicate pairs modal displays the pHash distance below each duplicate image
+- Distance value helps users understand similarity level (0 = identical, higher = more different)
+
+Implementation: `backend/app/services/image_analysis.py`, `backend/app/api/images.py`, `frontend/src/api/client.ts`, `frontend/src/pages/ImagesPage.tsx`
+
+Tests: `backend/tests/test_api.py::TestDatasetWorkflow::test_detect_duplicates`, `frontend/src/test/App.test.tsx`
 
 ### continue-implementation — Continue implementation and resolve known failures
 

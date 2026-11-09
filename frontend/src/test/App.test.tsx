@@ -44,7 +44,7 @@ vi.mock('../api/client', () => ({
     duplicate_count: 1, exif_issues_count: 0, avg_quality_score: 0.85,
   }),
   assignSplits: vi.fn().mockResolvedValue({ assigned: 5, stats: { train: 3, val: 1, test: 1 }, strategy: 'deterministic' }),
-  detectDuplicates: vi.fn().mockResolvedValue({ pairs_found: 1, marked_duplicate: 1, pairs: [] }),
+  detectDuplicates: vi.fn().mockResolvedValue({ pairs_found: 1, marked_duplicate: 1, pairs: [{ canonical_id: 'a', duplicate_id: 'b', distance: 2 }] }),
   getDatasetAdvisory: vi.fn().mockResolvedValue({ advisory: 'This dataset looks good.', is_advisory: true }),
   exportManifestUrl: vi.fn((id: string, fmt: string) => `/api/datasets/${id}/export?fmt=${fmt}`),
   getLoginUrl: vi.fn(() => '/api/auth/login'),

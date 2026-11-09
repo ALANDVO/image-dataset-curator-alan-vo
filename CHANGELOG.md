@@ -1,6 +1,13 @@
 # Changelog
 
+## 1.5.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.4.0 — work-in-progress checkpoint
+
+### Added
+- **pHash distance in duplicate pairs modal**: Duplicate detection API now returns the perceptual hash Hamming distance for each duplicate pair. The modal displays "pHash distance: N" below each duplicate image, helping users understand similarity level (0 = identical, higher = more different).
 
 Partial code published for continued development. Known issues: STATUS.md.
 

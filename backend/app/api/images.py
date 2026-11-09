@@ -298,7 +298,7 @@ async def detect_duplicates(
 
     # Mark duplicates: second image in each pair is the duplicate
     marked: set[str] = set()
-    for id_a, id_b in pairs:
+    for id_a, id_b, dist in pairs:
         if id_b not in marked:
             img_b = db.get(ImageModel, id_b)
             if img_b:
@@ -309,7 +309,11 @@ async def detect_duplicates(
     _audit(db, "duplicate_detection", "dataset", dataset_id, user,
            {"threshold": threshold, "pairs_found": len(pairs), "marked": len(marked)})
     db.commit()
-    return {"pairs_found": len(pairs), "marked_duplicate": len(marked), "pairs": pairs[:50]}
+    return {
+        "pairs_found": len(pairs),
+        "marked_duplicate": len(marked),
+        "pairs": [{"canonical_id": a, "duplicate_id": b, "distance": d} for a, b, d in pairs[:50]]
+    }
 
 
 @router.get("/{image_id}/advisory")

@@ -216,7 +216,7 @@ def phash_distance(hash1: str, hash2: str) -> int:
     try:
         h1 = imagehash.hex_to_hash(hash1)
         h2 = imagehash.hex_to_hash(hash2)
-        return h1 - h2
+        return int(h1 - h2)
     except Exception:
         return 64  # Maximum distance on failure
 
@@ -224,20 +224,20 @@ def phash_distance(hash1: str, hash2: str) -> int:
 def find_duplicates(
     phashes: list[tuple[str, str]],  # list of (image_id, phash_hex)
     threshold: int = 8,
-) -> list[tuple[str, str]]:
+) -> list[tuple[str, str, int]]:
     """
     Find near-duplicate pairs by perceptual hash Hamming distance.
 
-    Returns list of (image_id_a, image_id_b) pairs whose phash distance <= threshold.
+    Returns list of (image_id_a, image_id_b, distance) tuples whose phash distance <= threshold.
     Runs in O(n²) – suitable for datasets up to ~10k images.
     """
-    duplicates: list[tuple[str, str]] = []
+    duplicates: list[tuple[str, str, int]] = []
     for i, (id_a, hash_a) in enumerate(phashes):
         for id_b, hash_b in phashes[i + 1:]:
             try:
                 dist = phash_distance(hash_a, hash_b)
                 if dist <= threshold:
-                    duplicates.append((id_a, id_b))
+                    duplicates.append((id_a, id_b, dist))
             except Exception:
                 continue
     return duplicates

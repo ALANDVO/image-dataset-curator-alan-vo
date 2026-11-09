@@ -171,8 +171,14 @@ function UploadZone({ datasetId, onUploaded }: { datasetId?: string; onUploaded:
 }
 
 // ─── Duplicate Pairs Modal ──────────────────────────────────────────────────────
+interface DuplicatePair {
+  canonical_id: string
+  duplicate_id: string
+  distance: number
+}
+
 function DuplicatePairsModal({ pairs, images, onClose }: {
-  pairs: [string, string][]
+  pairs: DuplicatePair[]
   images: ImageRecord[]
   onClose: () => void
 }) {
@@ -190,9 +196,9 @@ function DuplicatePairsModal({ pairs, images, onClose }: {
             {pairs.length} pair{pairs.length === 1 ? '' : 's'} detected. The second image in each pair is marked as a duplicate of the first.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {pairs.map(([canonicalId, duplicateId], idx) => {
-              const canonical = imageMap.get(canonicalId)
-              const duplicate = imageMap.get(duplicateId)
+            {pairs.map(({ canonical_id, duplicate_id, distance }, idx) => {
+              const canonical = imageMap.get(canonical_id)
+              const duplicate = imageMap.get(duplicate_id)
               return (
                 <div key={idx} className="card" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
@@ -202,7 +208,7 @@ function DuplicatePairsModal({ pairs, images, onClose }: {
                       )}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{canonical?.original_filename || canonicalId}</div>
+                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{canonical?.original_filename || canonical_id}</div>
                       <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>Canonical · {canonical?.width}×{canonical?.height} · {canonical?.format}</div>
                     </div>
                   </div>
@@ -214,9 +220,10 @@ function DuplicatePairsModal({ pairs, images, onClose }: {
                       )}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{duplicate?.original_filename || duplicateId}</div>
+                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{duplicate?.original_filename || duplicate_id}</div>
                       <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>Duplicate · {duplicate?.width}×{duplicate?.height} · {duplicate?.format}</div>
                       <span className="badge badge-dup" style={{ fontSize: '0.6rem', marginTop: '0.2rem', display: 'inline-block' }}>Duplicate</span>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--color-accent)', marginTop: '0.2rem' }}>pHash distance: {distance}</div>
                     </div>
                   </div>
                 </div>
@@ -244,7 +251,7 @@ export default function ImagesPage() {
   const [selected, setSelected] = useState<ImageRecord | null>(null)
   const [datasets, setDatasets] = useState<DatasetRecord[]>([])
   const [dupResult, setDupResult] = useState<string | null>(null)
-  const [dupPairs, setDupPairs] = useState<[string, string][] | null>(null)
+  const [dupPairs, setDupPairs] = useState<DuplicatePair[] | null>(null)
   const [dupPairImages, setDupPairImages] = useState<ImageRecord[]>([])
   const [showDupModal, setShowDupModal] = useState(false)
   const [running, setRunning] = useState(false)
@@ -289,7 +296,7 @@ export default function ImagesPage() {
         setDupPairs(res.pairs)
         // Fetch full image details for all pairs
         const allImageIds = new Set<string>()
-        res.pairs.forEach(([a, b]) => { allImageIds.add(a); allImageIds.add(b) })
+        res.pairs.forEach(p => { allImageIds.add(p.canonical_id); allImageIds.add(p.duplicate_id) })
         const pairImages: ImageRecord[] = []
         for (const id of allImageIds) {
           try {

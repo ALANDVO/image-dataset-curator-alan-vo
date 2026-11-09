@@ -79,7 +79,7 @@ export interface DatasetStats {
 export interface DuplicateDetectionResult {
   pairs_found: number
   marked_duplicate: number
-  pairs: [string, string][]
+  pairs: { canonical_id: string; duplicate_id: string; distance: number }[]
 }
 
 export interface Advisory {
