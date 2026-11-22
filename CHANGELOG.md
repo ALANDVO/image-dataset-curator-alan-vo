@@ -1,6 +1,13 @@
 # Changelog
 
+## 1.7.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.6.0 — work-in-progress checkpoint
+
+### Added
+- **pHash distance display in duplicate pairs modal**: Enhanced `phash_distance()` docstring documents return value semantics (0 = identical, 64 = maximally different). Modal displays `pHash distance: N` below each duplicate image pair, helping users understand similarity level.
 
 Partial code published for continued development. Known issues: STATUS.md.
 
