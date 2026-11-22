@@ -212,15 +212,18 @@ def strip_exif(data: bytes) -> bytes:
 
 
 def phash_distance(hash1: str, hash2: str) -> int:
-    """Hamming distance between two perceptual hash hex strings."""
+    """Hamming distance between two perceptual hash hex strings.
+
+    Returns the Hamming distance between two phash hex strings, range 0-64:
+    - 0: identical perceptual hashes (exact duplicates)
+    - 64: maximally different perceptual hashes
+    """
     try:
         h1 = imagehash.hex_to_hash(hash1)
         h2 = imagehash.hex_to_hash(hash2)
         return int(h1 - h2)
     except Exception:
         return 64  # Maximum distance on failure
-
-
 def find_duplicates(
     phashes: list[tuple[str, str]],  # list of (image_id, phash_hex)
     threshold: int = 8,
