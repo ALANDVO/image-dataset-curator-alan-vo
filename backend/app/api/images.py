@@ -97,6 +97,17 @@ class ImagePatch(BaseModel):
     split: str | None = Field(None, pattern="^(train|val|test|unassigned)$")
 
 
+
+class DuplicateDetectionPair(BaseModel):
+    canonical_id: str
+    duplicate_id: str
+    distance: int
+
+
+class DuplicateDetectionResult(BaseModel):
+    pairs_found: int
+    marked_duplicate: int
+    pairs: list[DuplicateDetectionPair]
 @router.post("", response_model=ImageOut, status_code=201)
 async def upload_image(
     request: Request,
@@ -281,7 +292,7 @@ async def detect_duplicates(
     threshold: int = Query(8, ge=0, le=64),
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(require_analyst),
-) -> dict[str, Any]:
+) -> DuplicateDetectionResult:
     """
     Run perceptual-hash duplicate detection across the dataset.
 
@@ -309,11 +320,11 @@ async def detect_duplicates(
     _audit(db, "duplicate_detection", "dataset", dataset_id, user,
            {"threshold": threshold, "pairs_found": len(pairs), "marked": len(marked)})
     db.commit()
-    return {
-        "pairs_found": len(pairs),
-        "marked_duplicate": len(marked),
-        "pairs": [{"canonical_id": a, "duplicate_id": b, "distance": d} for a, b, d in pairs[:50]]
-    }
+    return DuplicateDetectionResult(
+        pairs_found=len(pairs),
+        marked_duplicate=len(marked),
+        pairs=[DuplicateDetectionPair(canonical_id=a, duplicate_id=b, distance=d) for a, b, d in pairs[:50]],
+    )
 
 
 @router.get("/{image_id}/advisory")
